@@ -1,0 +1,8 @@
+$ Select the DETOUR sub-program
+DETOUR
+
+$ Turn-off QA data display. Like which tools used, date-time when generated etc.
+QA OFF
+
+$ Set Solid mode.
+SOLID

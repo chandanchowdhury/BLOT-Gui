@@ -1,0 +1,4 @@
+$ Generate the plot.
+HARD
+
+EXIT
