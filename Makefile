@@ -1,4 +1,4 @@
-EXODUS_DIR=/home/chandan/Desktop/cmds
+EXODUS_DIR=/home/c/chandanchowdhury/SEACAS/cmds
 
 EXODUS_FILE=c_final
 

@@ -166,7 +166,6 @@ class BlotState {
 			logger.severe("Failed to execute make: "+e.getMessage());
 			return -1;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
