@@ -10,8 +10,8 @@ BLOT=blot
 DEVICE=cps
 
 # Generate the PS file.
-GENPS: $(EXODUS_FILE).e $(CMD_FILE)
-	$(BLOT) --input $(CMD_FILE) $(EXODUS_FILE).e $(DEVICE) 
+GENPS: $(EXODUS_DIR)/$(EXODUS_FILE).e $(CMD_FILE)
+	$(BLOT) --input $(CMD_FILE) $(EXODUS_DIR)/$(EXODUS_FILE).e $(DEVICE) --hardcopy $(EXODUS_FILE)
 
 
 # Command to convert PS to JPG.

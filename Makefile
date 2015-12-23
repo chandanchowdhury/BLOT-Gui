@@ -1,5 +1,6 @@
+EXODUS_DIR=/home/c/chandanchowdhury/SEACAS/cmds
 
-EXODUS_FILE=c_final.e
+EXODUS_FILE=c_final
 
 CMD_FILE=blot_cmd.txt
 # The file details will be included by the BlotState program.
@@ -14,8 +15,8 @@ BLOT=blot
 DEVICE=cps
 
 # Generate the PS file.
-GENPS: $(EXODUS_FILE).e $(CMD_FILE)
-	$(BLOT) --input $(CMD_FILE) $(EXODUS_FILE).e $(DEVICE) 
+GENPS: $(EXODUS_DIR)/$(EXODUS_FILE).e $(CMD_FILE)
+	$(BLOT) --input $(CMD_FILE) $(EXODUS_DIR)/$(EXODUS_FILE).e $(DEVICE) --hardcopy $(EXODUS_FILE)
 
 
 # Command to convert PS to JPG.
