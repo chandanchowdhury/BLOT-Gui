@@ -1,19 +1,21 @@
 package edu.ksu.cis.seacas;
 
-import java.util.Arrays;
 import java.util.logging.Logger;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.*;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
+
+import org.eclipse.swt.layout.*;
+
+import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -22,17 +24,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-
 public class MainScreen {
 
 	private final Logger logger = Logger.getLogger(this.getClass().getPackage().getName());
 
-	protected Shell shell;
-	protected Canvas canvas;
-	protected Image image;
+	Shell shell;
+	Canvas canvas;
+	Image image;
 
-	//TODO: Implement a config file to read the parameters from there
-	private String currentDir ="/Users/chandan/seacas/cmds";
+	// TODO: Implement a config file to read the parameters from there
+	private String currentDir = "/Users/chandan/Desktop/cmds";
 	private Text textExodusFilePath;
 
 	/**
@@ -40,13 +41,16 @@ public class MainScreen {
 	 */
 	private BlotState blot;
 
-	private Text textRotX;
-	private Text textRotY;
-	private Text textRotZ;
+	Text textRotX;
+	Text textRotY;
+	Text textRotZ;
+	Text textCMD;
 
+	Button buttonCMD;
 
 	/**
 	 * Launch the application.
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -77,18 +81,17 @@ public class MainScreen {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
+		//Display display = new Display();
 		shell = new Shell();
 		shell.setSize(1024, 768);
 		shell.setText("SEACAS - Blot Viewer");
-		shell.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		//Create the BlotState instance
+		// Create the BlotState instance
 		this.blot = new BlotState();
-
-		/* Details of Exodus File Selector */
-		Composite compositeExodus = new Composite(shell, SWT.NONE);
+		shell.setLayout(new RowLayout(SWT.HORIZONTAL));
+		Composite compositeExodus = new Composite(shell, SWT.BORDER_DASH);
+		compositeExodus.setLayoutData(new RowData(963, SWT.DEFAULT));
 		compositeExodus.setLayout(new RowLayout(SWT.HORIZONTAL));
-		compositeExodus.setLayoutData(new RowData(800, 40));
 
 		Button btnSelectExodusFile = new Button(compositeExodus, SWT.NONE);
 		btnSelectExodusFile.setLayoutData(new RowData(SWT.DEFAULT, 30));
@@ -110,20 +113,26 @@ public class MainScreen {
 		btnGeneratePlot.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//loadImage();
+				// loadImage();
 				/* Execute Blot to generate new image */
 				executeBlot();
 
 				loadImage();
 			}
-		}
-		);
-
+		});
 
 		/* Details of X-axis buttons */
-		Composite compositeBtnX = new Composite(shell, SWT.NONE);
+
+		Composite compositeRow2 = new Composite(shell, SWT.NONE);
+		compositeRow2.setLayoutData(new RowData(960, SWT.DEFAULT));
+		compositeRow2.setLayout(new RowLayout(SWT.HORIZONTAL));
+
+		Composite compositeBtn = new Composite(compositeRow2, SWT.NONE);
+		compositeBtn.setLayoutData(new RowData(336, SWT.DEFAULT));
+		compositeBtn.setLayout(new RowLayout(SWT.HORIZONTAL));
+		Composite compositeBtnX = new Composite(compositeBtn, SWT.NONE);
+		compositeBtnX.setLayoutData(new RowData(327, SWT.DEFAULT));
 		compositeBtnX.setLayout(new RowLayout(SWT.HORIZONTAL));
-		compositeBtnX.setLayoutData(new RowData(700, 30));
 
 		Button btnRotXLargeNeg = new Button(compositeBtnX, SWT.NONE);
 		btnRotXLargeNeg.setText("<< 5");
@@ -134,7 +143,6 @@ public class MainScreen {
 			}
 		});
 
-
 		Button btnRotXSmallNeg = new Button(compositeBtnX, SWT.NONE);
 		btnRotXSmallNeg.setText("< 2");
 		btnRotXSmallNeg.addSelectionListener(new SelectionAdapter() {
@@ -143,7 +151,6 @@ public class MainScreen {
 				rotateX(-2);
 			}
 		});
-
 
 		Label lblX = new Label(compositeBtnX, SWT.CENTER);
 		lblX.setAlignment(SWT.CENTER);
@@ -159,7 +166,6 @@ public class MainScreen {
 			}
 		});
 
-
 		Button btnRotXLargePos = new Button(compositeBtnX, SWT.NONE);
 		btnRotXLargePos.setText("5 >>");
 		btnRotXLargePos.addSelectionListener(new SelectionAdapter() {
@@ -170,28 +176,12 @@ public class MainScreen {
 		});
 
 		textRotX = new Text(compositeBtnX, SWT.BORDER);
-		//TODO: Manual Input based rotation not working, check and correct below code
-		textRotX.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				logger.fine("Rotating on input value");
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.CR) {
-
-					logger.fine("Rotating X: "+e.getSource().toString());
-					rotateX(Integer.getInteger(e.getSource().toString()));
-				}
-			}
-		});
+		textRotX.setLayoutData(new RowData(48, SWT.DEFAULT));
+		Composite compositeBtnY = new Composite(compositeBtn, SWT.NONE);
+		compositeBtnY.setLayoutData(new RowData(327, SWT.DEFAULT));
+		compositeBtnY.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		/* Details of Y-axis buttons */
-		Composite compositeBtnY = new Composite(shell, SWT.NONE);
-		compositeBtnY.setLayout(new RowLayout(SWT.HORIZONTAL));
-		compositeBtnY.setLayoutData(new RowData(700, 30));
-
 
 		Button btnRotYLargeNeg = new Button(compositeBtnY, SWT.NONE);
 		btnRotYLargeNeg.setText("<< 5");
@@ -202,7 +192,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotYSmallNeg = new Button(compositeBtnY, SWT.NONE);		
+		Button btnRotYSmallNeg = new Button(compositeBtnY, SWT.NONE);
 		btnRotYSmallNeg.setText("< 2");
 		btnRotYSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -235,29 +225,14 @@ public class MainScreen {
 		});
 
 		textRotY = new Text(compositeBtnY, SWT.BORDER);
-		//TODO: Manual Input based rotation not working, check and correct below code
-		textRotY.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				//logger.fine("Rotating Y on input value");
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.CR) {
-					//logger.fine("Rotating Y: "+e.getSource().toString());
-					rotateY	(Integer.getInteger(e.getSource().toString()));
-				}
-			}
-		});
-
-
+		textRotY.setLayoutData(new RowData(48, SWT.DEFAULT));
+		
 		/* Details of Z-axis buttons */
-		Composite compositeBtnZ = new Composite(shell, SWT.NONE);
+		Composite compositeBtnZ = new Composite(compositeBtn, SWT.NONE);
+		compositeBtnZ.setLayoutData(new RowData(327, SWT.DEFAULT));
 		compositeBtnZ.setLayout(new RowLayout(SWT.HORIZONTAL));
-		compositeBtnZ.setLayoutData(new RowData(700, 30));
 
-
+		
 		Button btnRotZLargeNeg = new Button(compositeBtnZ, SWT.NONE);
 		btnRotZLargeNeg.setText("<< 5");
 		btnRotZLargeNeg.addSelectionListener(new SelectionAdapter() {
@@ -267,7 +242,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotZSmallNeg = new Button(compositeBtnZ, SWT.NONE);		
+		Button btnRotZSmallNeg = new Button(compositeBtnZ, SWT.NONE);
 		btnRotZSmallNeg.setText("< 2");
 		btnRotZSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -300,30 +275,74 @@ public class MainScreen {
 		});
 
 		textRotZ = new Text(compositeBtnZ, SWT.BORDER);
-		//TODO: Manual Input based rotation not working, check and correct below code
-		textRotZ.addKeyListener(new KeyListener() {
+		textRotZ.setLayoutData(new RowData(48, SWT.DEFAULT));
+
+		Composite compositeCmd = new Composite(compositeRow2, SWT.NONE);
+		compositeCmd.setLayoutData(new RowData(327, 111));
+
+		Button btnEnableCommand = new Button(compositeCmd, SWT.CHECK);
+		btnEnableCommand.setBounds(0, 0, 155, 18);
+		btnEnableCommand.setText("Enable Command");
+
+		textCMD = new Text(compositeCmd, SWT.BORDER);
+		textCMD.setBounds(0, 24, 433, 87);
+		
+		
+		
+		textRotX.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				//logger.fine("Rotating Z on input value");
+				logger.fine("Rotating on input value");
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
-					//logger.fine("Rotating Z: "+e.getSource().toString());
-					rotateZ	(Integer.getInteger(e.getSource().toString()));
+
+					//logger.fine("Rotating X: " + textRotX.getText());
+					//rotateX(45);
+					rotateX(Integer.parseInt(textRotX.getText()));
 				}
 			}
 		});
 
+		textRotY.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// logger.fine("Rotating Y on input value");
+			}
 
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.CR) {
+					// logger.fine("Rotating Y: "+e.getSource().toString());
+					rotateY(Integer.parseInt(textRotX.getText()));
+				}
+			}
+		});
+		
+		textRotZ.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// logger.fine("Rotating Z on input value");
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.CR) {
+					// logger.fine("Rotating Z: "+e.getSource().toString());
+					rotateZ(Integer.parseInt(textRotZ.getText()));
+				}
+			}
+		});
+		
 		/* Details of Canvas which will be used for displaying the image */
 		Composite compositeCanvas = new Composite(shell, SWT.NONE);
 		compositeCanvas.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		canvas = new Canvas(compositeCanvas, SWT.NONE);
-		//canvas.setLayout(new FillLayout(SWT.HORIZONTAL));
-		canvas.setLayoutData(new RowData(800, 600));
+		// canvas.setLayout(new FillLayout(SWT.HORIZONTAL));
+		canvas.setLayoutData(new RowData(953, 600));
 
 		canvas.addPaintListener(new PaintListener() {
 			@Override
@@ -331,7 +350,7 @@ public class MainScreen {
 				if (image != null) {
 					canvas.setLayoutData(new RowData(image.getBounds().width, image.getBounds().height));
 					e.gc.drawImage(image, 0, 0);
-					//image.dispose();
+					// image.dispose();
 				}
 
 			}
@@ -344,11 +363,11 @@ public class MainScreen {
 	 **/
 	protected void rotateX(int degree) {
 		logger.finer("Rotate X by " + degree);
-		//Set the new X-coordinate to current X-coordinate plus degree
+		// Set the new X-coordinate to current X-coordinate plus degree
 		this.blot.setCurrent_x(this.blot.getCurrent_x() + degree);
 		// Execute Blot to generate the updated image
 		executeBlot();
-		//Load the updated image
+		// Load the updated image
 		loadImage();
 	}
 
@@ -359,12 +378,12 @@ public class MainScreen {
 	protected void rotateY(int degree) {
 		logger.finer("Rotate Y by " + degree);
 
-		//Set the new Y-coordinate to current Y-coordinate plus degree
+		// Set the new Y-coordinate to current Y-coordinate plus degree
 		this.blot.setCurrent_y(this.blot.getCurrent_y() + degree);
 
 		// Execute Blot to generate the updated image
 		executeBlot();
-		//Load the updated image
+		// Load the updated image
 		loadImage();
 
 	}
@@ -376,56 +395,71 @@ public class MainScreen {
 	protected void rotateZ(int degree) {
 		logger.finer("Rotate Z by " + degree);
 
-		//Set the new Y-coordinate to current Y-coordinate plus degree
+		// Set the new Y-coordinate to current Y-coordinate plus degree
 		this.blot.setCurrent_z(this.blot.getCurrent_z() + degree);
 
 		// Execute Blot to generate the updated image
 		executeBlot();
-		//Load the updated image
+		// Load the updated image
 		loadImage();
 
 	}
 
 	/**
-	 * Handle the "Select Exodus File" button and display the file chooser dialog
+	 * Handle the "Select Exodus File" button and display the file chooser
+	 * dialog
 	 */
 	protected void selectExodusFile() {
 		FileDialog fileChooser = new FileDialog(this.shell, SWT.OPEN);
 		fileChooser.setText("Select EXODUS file");
 		fileChooser.setFilterPath(currentDir);
-		fileChooser.setFilterExtensions(
-				new String[] { "*.e;" });
-		fileChooser.setFilterNames (
-				new String[] { "EXODUS File" + " (e)" });
+		fileChooser.setFilterExtensions(new String[] { "*.e;" });
+		fileChooser.setFilterNames(new String[] { "EXODUS File" + " (e)" });
 		String filename = fileChooser.open();
-		if (filename != null){
+		if (filename != null) {
 
 			textExodusFilePath.setText(fileChooser.getFilterPath() + filename);
 			currentDir = fileChooser.getFilterPath();
 
 			blot.setBlotExodusFileDir(fileChooser.getFilterPath());
 
-			logger.info("Got file: "+fileChooser.getFileName());
+			logger.info("Got file: " + fileChooser.getFileName());
 			String[] fileN = fileChooser.getFileName().split("\\.");
-			//logger.info("Array:" + Arrays.toString(fileN));
-			
-			if(fileN != null && fileN.length > 0) {
+			// logger.info("Array:" + Arrays.toString(fileN));
+
+			if (fileN != null && fileN.length > 0) {
 				blot.setExodus_file(fileN[0]);
 			}
 		}
 	}
 
 	/**
-	 * Update/Generate the required files and invoke Blot command via BlotState instance
+	 * Update/Generate the required files and invoke Blot command via BlotState
+	 * instance
 	 */
 	protected void executeBlot() {
-		blot.updateCmdFile();
-		blot.updateMakeFile();
+		logger.info("executeBlot() entered");
 
-		int returnValue = blot.execute();
-		logger.fine("executeBlot Return Code: "+returnValue);
-		
-		//TODO: Check return value from BlotState and inform user if any error has occurred
+		logger.info("Custom Command: " + textCMD.getText());
+		blot.setBlotCmdText(textCMD.getText());
+
+		/*if (buttonCMD.getSelection()) {
+			logger.fine(textCMD.getText());
+			blot.setBlotCmdText(textCMD.getText());
+		}*/
+
+		if (blot.getExodus_file() != "") {
+			blot.updateCmdFile();
+			blot.updateMakeFile();
+
+			int returnValue = blot.execute();
+			logger.fine("executeBlot Return Code: " + returnValue);
+			// TODO: Check return value from BlotState and inform user if any
+			// error has occurred
+
+			loadImage();
+		}
+
 	}
 
 	/**
@@ -435,10 +469,10 @@ public class MainScreen {
 	protected void loadImage() {
 		logger.info("loadImage() entered...");
 
-		logger.info("Loading image at: "+blot.getImg_path());
+		logger.info("Loading image at: " + blot.getImg_path());
 
 		/* Get the image path from Blot state */
-		logger.info("Loading Image: "+blot.getImg_path().trim());
+		logger.info("Loading Image: " + blot.getImg_path().trim());
 		String img_src = blot.getImg_path().trim();
 
 		if (img_src != "") {
@@ -446,8 +480,6 @@ public class MainScreen {
 			if (image != null && image.isDisposed() == false)
 				image.dispose();
 			image = null;
-
-
 
 			/* Load new image */
 			image = new Image(canvas.getDisplay(), blot.getImg_path());
@@ -458,8 +490,9 @@ public class MainScreen {
 			/* Set the image in canvas */
 			canvas.setBackgroundImage(image);
 
-			//GC gc = new GC(canvas);
-			//gc.drawImage(image, image.getBounds().width, image.getBounds().height);
+			// GC gc = new GC(canvas);
+			// gc.drawImage(image, image.getBounds().width,
+			// image.getBounds().height);
 
 		}
 	}
