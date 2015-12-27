@@ -9,12 +9,8 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
-
 import org.eclipse.swt.layout.*;
-
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -121,20 +117,21 @@ public class MainScreen {
 			}
 		});
 
-		/* Details of X-axis buttons */
-
-		Composite compositeRow2 = new Composite(shell, SWT.NONE);
+		Composite compositeRow2 = new Composite(shell, SWT.BORDER_SOLID);
 		compositeRow2.setLayoutData(new RowData(960, SWT.DEFAULT));
 		compositeRow2.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		Composite compositeBtn = new Composite(compositeRow2, SWT.NONE);
-		compositeBtn.setLayoutData(new RowData(336, SWT.DEFAULT));
+		Composite compositeBtn = new Composite(compositeRow2, SWT.BORDER);
+		compositeBtn.setLayoutData(new RowData(300, SWT.DEFAULT));
 		compositeBtn.setLayout(new RowLayout(SWT.HORIZONTAL));
-		Composite compositeBtnX = new Composite(compositeBtn, SWT.NONE);
-		compositeBtnX.setLayoutData(new RowData(327, SWT.DEFAULT));
+		
+		/* Details of X-axis buttons */
+		
+		Composite compositeBtnX = new Composite(compositeBtn, SWT.BORDER);
+		compositeBtnX.setLayoutData(new RowData(300, SWT.DEFAULT));
 		compositeBtnX.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		Button btnRotXLargeNeg = new Button(compositeBtnX, SWT.NONE);
+		Button btnRotXLargeNeg = new Button(compositeBtnX, SWT.BORDER);
 		btnRotXLargeNeg.setText("<< 5");
 		btnRotXLargeNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -143,7 +140,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotXSmallNeg = new Button(compositeBtnX, SWT.NONE);
+		Button btnRotXSmallNeg = new Button(compositeBtnX, SWT.BORDER);
 		btnRotXSmallNeg.setText("< 2");
 		btnRotXSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -157,7 +154,7 @@ public class MainScreen {
 		lblX.setLayoutData(new RowData(17, 17));
 		lblX.setText("X");
 
-		Button btnRotXSmallPos = new Button(compositeBtnX, SWT.NONE);
+		Button btnRotXSmallPos = new Button(compositeBtnX, SWT.BORDER);
 		btnRotXSmallPos.setText("2 >");
 		btnRotXSmallPos.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -166,7 +163,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotXLargePos = new Button(compositeBtnX, SWT.NONE);
+		Button btnRotXLargePos = new Button(compositeBtnX, SWT.BORDER);
 		btnRotXLargePos.setText("5 >>");
 		btnRotXLargePos.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -177,13 +174,13 @@ public class MainScreen {
 
 		textRotX = new Text(compositeBtnX, SWT.BORDER);
 		textRotX.setLayoutData(new RowData(48, SWT.DEFAULT));
-		Composite compositeBtnY = new Composite(compositeBtn, SWT.NONE);
-		compositeBtnY.setLayoutData(new RowData(327, SWT.DEFAULT));
+		Composite compositeBtnY = new Composite(compositeBtn, SWT.BORDER);
+		compositeBtnY.setLayoutData(new RowData(300, SWT.DEFAULT));
 		compositeBtnY.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		/* Details of Y-axis buttons */
 
-		Button btnRotYLargeNeg = new Button(compositeBtnY, SWT.NONE);
+		Button btnRotYLargeNeg = new Button(compositeBtnY, SWT.BORDER);
 		btnRotYLargeNeg.setText("<< 5");
 		btnRotYLargeNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -192,7 +189,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotYSmallNeg = new Button(compositeBtnY, SWT.NONE);
+		Button btnRotYSmallNeg = new Button(compositeBtnY, SWT.BORDER);
 		btnRotYSmallNeg.setText("< 2");
 		btnRotYSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -206,7 +203,7 @@ public class MainScreen {
 		lblY.setLayoutData(new RowData(17, 17));
 		lblY.setText("Y");
 
-		Button btnRotYSmallPos = new Button(compositeBtnY, SWT.NONE);
+		Button btnRotYSmallPos = new Button(compositeBtnY, SWT.BORDER);
 		btnRotYSmallPos.setText("2 >");
 		btnRotYSmallPos.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -215,7 +212,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotYLargePos = new Button(compositeBtnY, SWT.NONE);
+		Button btnRotYLargePos = new Button(compositeBtnY, SWT.BORDER);
 		btnRotYLargePos.setText("5 >>");
 		btnRotYLargePos.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -228,12 +225,12 @@ public class MainScreen {
 		textRotY.setLayoutData(new RowData(48, SWT.DEFAULT));
 		
 		/* Details of Z-axis buttons */
-		Composite compositeBtnZ = new Composite(compositeBtn, SWT.NONE);
-		compositeBtnZ.setLayoutData(new RowData(327, SWT.DEFAULT));
+		Composite compositeBtnZ = new Composite(compositeBtn, SWT.BORDER);
+		compositeBtnZ.setLayoutData(new RowData(300, SWT.DEFAULT));
 		compositeBtnZ.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		
-		Button btnRotZLargeNeg = new Button(compositeBtnZ, SWT.NONE);
+		Button btnRotZLargeNeg = new Button(compositeBtnZ, SWT.BORDER);
 		btnRotZLargeNeg.setText("<< 5");
 		btnRotZLargeNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -242,7 +239,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotZSmallNeg = new Button(compositeBtnZ, SWT.NONE);
+		Button btnRotZSmallNeg = new Button(compositeBtnZ, SWT.BORDER);
 		btnRotZSmallNeg.setText("< 2");
 		btnRotZSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -256,7 +253,7 @@ public class MainScreen {
 		lblZ.setLayoutData(new RowData(17, 17));
 		lblZ.setText("Z");
 
-		Button btnRotZSmallPos = new Button(compositeBtnZ, SWT.NONE);
+		Button btnRotZSmallPos = new Button(compositeBtnZ, SWT.BORDER);
 		btnRotZSmallPos.setText("2 >");
 		btnRotZSmallPos.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -265,7 +262,7 @@ public class MainScreen {
 			}
 		});
 
-		Button btnRotZLargePos = new Button(compositeBtnZ, SWT.NONE);
+		Button btnRotZLargePos = new Button(compositeBtnZ, SWT.BORDER);
 		btnRotZLargePos.setText("5 >>");
 		btnRotZLargePos.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -278,14 +275,14 @@ public class MainScreen {
 		textRotZ.setLayoutData(new RowData(48, SWT.DEFAULT));
 
 		Composite compositeCmd = new Composite(compositeRow2, SWT.NONE);
-		compositeCmd.setLayoutData(new RowData(327, 111));
+		compositeCmd.setLayoutData(new RowData(600, 125));
 
 		Button btnEnableCommand = new Button(compositeCmd, SWT.CHECK);
 		btnEnableCommand.setBounds(0, 0, 155, 18);
 		btnEnableCommand.setText("Enable Command");
 
-		textCMD = new Text(compositeCmd, SWT.BORDER);
-		textCMD.setBounds(0, 24, 433, 87);
+		textCMD = new Text(compositeCmd, SWT.BORDER | SWT.MULTI);
+		textCMD.setBounds(0, 25, 400, 100);
 		
 		
 		
@@ -316,7 +313,7 @@ public class MainScreen {
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
 					// logger.fine("Rotating Y: "+e.getSource().toString());
-					rotateY(Integer.parseInt(textRotX.getText()));
+					rotateY(Integer.parseInt(textRotY.getText()));
 				}
 			}
 		});
@@ -337,12 +334,12 @@ public class MainScreen {
 		});
 		
 		/* Details of Canvas which will be used for displaying the image */
-		Composite compositeCanvas = new Composite(shell, SWT.NONE);
+		Composite compositeCanvas = new Composite(shell, SWT.BORDER);
 		compositeCanvas.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		canvas = new Canvas(compositeCanvas, SWT.NONE);
+		canvas = new Canvas(compositeCanvas, SWT.BORDER);
 		// canvas.setLayout(new FillLayout(SWT.HORIZONTAL));
-		canvas.setLayoutData(new RowData(953, 600));
+		canvas.setLayoutData(new RowData(900, 600));
 
 		canvas.addPaintListener(new PaintListener() {
 			@Override
