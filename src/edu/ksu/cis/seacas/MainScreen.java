@@ -280,6 +280,15 @@ public class MainScreen {
 		Button btnEnableCommand = new Button(compositeCmd, SWT.CHECK);
 		btnEnableCommand.setBounds(0, 0, 155, 18);
 		btnEnableCommand.setText("Enable Command");
+		
+		btnEnableCommand.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//System.out.println("Selection toggle...");
+				Button bt =(Button) e.getSource();
+				setCmdText(bt.getSelection());
+			}
+		});
 
 		textCMD = new Text(compositeCmd, SWT.BORDER | SWT.MULTI);
 		textCMD.setBounds(0, 25, 400, 100);
@@ -437,8 +446,8 @@ public class MainScreen {
 	protected void executeBlot() {
 		logger.info("executeBlot() entered");
 
-		logger.info("Custom Command: " + textCMD.getText());
-		blot.setBlotCmdText(textCMD.getText());
+		//logger.info("Custom Command: " + textCMD.getText());
+		//blot.setBlotCmdText(textCMD.getText());
 
 		/*if (buttonCMD.getSelection()) {
 			logger.fine(textCMD.getText());
@@ -491,6 +500,18 @@ public class MainScreen {
 			// gc.drawImage(image, image.getBounds().width,
 			// image.getBounds().height);
 
+		}
+	}
+	
+	void setCmdText(boolean active) {
+		if (active) {
+			logger.info("Activating custom command");
+			String blotCmdText = this.textCMD.getText();
+			this.blot.setBlotCmdText(blotCmdText);
+		}
+		else {
+			logger.info("Deactivating custom command");
+			this.blot.setBlotCmdText("");
 		}
 	}
 }
