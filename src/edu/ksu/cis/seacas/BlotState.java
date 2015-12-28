@@ -13,13 +13,15 @@ import java.io.*;
  */
 class BlotState {
 	
-	private String blotExodusFile;
-	private String blotExodusFileDir;
-	private int blotCurrent_x;
-	private int blotCurrent_y;
-	private int blotCurrent_z;
-	private String ps_path;
-	private String img_path;
+	private String blotExodusFile = "";
+	private String blotExodusFileDir = "";
+	private String blotCmdText = "";
+
+	private int blotCurrent_x = 0;
+	private int blotCurrent_y = 0;
+	private int blotCurrent_z = 0;
+	private String ps_path = "";
+	private String img_path = "";
 	
 	private String blotMakefileTempalte = "./MakefileTemplate.txt";
 	private String blotInputFile = "blot_cmd.txt";
@@ -76,10 +78,13 @@ class BlotState {
 			lineDataStr = "\n$ --- Auto-generation Ends --- \n\n";
 			blotCmdFile.write("\n"+lineDataStr);
 			
-			// Copy the pre-rotation commands from BlotCmdTempltPre.txt
+			blotCmdFile.write(this.blotCmdText);
+			
+			// Copy the post-rotation commands from BlotCmdTempltPost.txt
 			while((lineData = blotCmdTempltPost.read()) != -1) {
 				blotCmdFile.write(lineData);
 			}
+			
 			
 			blotCmdTempltPre.close();
 			blotCmdTempltPost.close();
@@ -229,6 +234,14 @@ class BlotState {
 	
 	public void setImg_path(String img_path) {
 		this.img_path = img_path;
+	}
+	
+	public String getBlotCmdText() {
+		return blotCmdText;
+	}
+
+	public void setBlotCmdText(String blotCmdText) {
+		this.blotCmdText = blotCmdText;
 	}
 	
 	public static void main(String[] args) {
