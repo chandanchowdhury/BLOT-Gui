@@ -1,1 +1,7 @@
 /bin/
+.classpath
+*.ps
+*.jpeg
+*.jpg
+blot_cmd.txt
+Makefile
