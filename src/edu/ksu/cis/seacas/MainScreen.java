@@ -130,6 +130,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(-5);
+				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) - 5)));
 			}
 		});
 
@@ -139,6 +140,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(-2);
+				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) - 2)));
 			}
 		});
 
@@ -153,6 +155,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(2);
+				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) + 2)));
 			}
 		});
 
@@ -162,6 +165,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(5);
+				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) + 5)));
 			}
 		});
 
@@ -180,6 +184,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(-5);
+				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) - 5)));
 			}
 		});
 
@@ -189,6 +194,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(-2);
+				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) - 2)));
 			}
 		});
 
@@ -203,6 +209,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(2);
+				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) + 2)));
 			}
 		});
 
@@ -212,6 +219,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(5);
+				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) + 5)));
 			}
 		});
 
@@ -231,6 +239,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(-5);
+				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) - 5)));
 			}
 		});
 
@@ -240,6 +249,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(-2);
+				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) - 2)));
 			}
 		});
 
@@ -254,6 +264,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(2);
+				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) + 2)));
 			}
 		});
 
@@ -263,6 +274,7 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(5);
+				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) + 5)));
 			}
 		});
 
