@@ -12,13 +12,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 public class MainScreen {
 
@@ -113,7 +106,7 @@ public class MainScreen {
 				/* Execute Blot to generate new image */
 				executeBlot();
 
-				loadImage();
+				//loadImage();
 			}
 		});
 
@@ -122,13 +115,13 @@ public class MainScreen {
 		compositeRow2.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		Composite compositeBtn = new Composite(compositeRow2, SWT.BORDER);
-		compositeBtn.setLayoutData(new RowData(300, SWT.DEFAULT));
+		compositeBtn.setLayoutData(new RowData(340, SWT.DEFAULT));
 		compositeBtn.setLayout(new RowLayout(SWT.HORIZONTAL));
 		
 		/* Details of X-axis buttons */
 		
 		Composite compositeBtnX = new Composite(compositeBtn, SWT.BORDER);
-		compositeBtnX.setLayoutData(new RowData(300, SWT.DEFAULT));
+		compositeBtnX.setLayoutData(new RowData(330, SWT.DEFAULT));
 		compositeBtnX.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		Button btnRotXLargeNeg = new Button(compositeBtnX, SWT.BORDER);
@@ -174,11 +167,12 @@ public class MainScreen {
 
 		textRotX = new Text(compositeBtnX, SWT.BORDER);
 		textRotX.setLayoutData(new RowData(48, SWT.DEFAULT));
-		Composite compositeBtnY = new Composite(compositeBtn, SWT.BORDER);
-		compositeBtnY.setLayoutData(new RowData(300, SWT.DEFAULT));
-		compositeBtnY.setLayout(new RowLayout(SWT.HORIZONTAL));
-
+		textRotX.setText("0");
+		
 		/* Details of Y-axis buttons */
+		Composite compositeBtnY = new Composite(compositeBtn, SWT.BORDER);
+		compositeBtnY.setLayoutData(new RowData(330, SWT.DEFAULT));
+		compositeBtnY.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		Button btnRotYLargeNeg = new Button(compositeBtnY, SWT.BORDER);
 		btnRotYLargeNeg.setText("<< 5");
@@ -223,10 +217,11 @@ public class MainScreen {
 
 		textRotY = new Text(compositeBtnY, SWT.BORDER);
 		textRotY.setLayoutData(new RowData(48, SWT.DEFAULT));
+		textRotY.setText("0");
 		
 		/* Details of Z-axis buttons */
 		Composite compositeBtnZ = new Composite(compositeBtn, SWT.BORDER);
-		compositeBtnZ.setLayoutData(new RowData(300, SWT.DEFAULT));
+		compositeBtnZ.setLayoutData(new RowData(330, SWT.DEFAULT));
 		compositeBtnZ.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		
@@ -273,6 +268,7 @@ public class MainScreen {
 
 		textRotZ = new Text(compositeBtnZ, SWT.BORDER);
 		textRotZ.setLayoutData(new RowData(48, SWT.DEFAULT));
+		textRotZ.setText("0");
 
 		Composite compositeCmd = new Composite(compositeRow2, SWT.NONE);
 		compositeCmd.setLayoutData(new RowData(600, 125));
@@ -285,27 +281,24 @@ public class MainScreen {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//System.out.println("Selection toggle...");
-				Button bt =(Button) e.getSource();
+				Button bt = (Button) e.getSource();
 				setCmdText(bt.getSelection());
 			}
 		});
 
 		textCMD = new Text(compositeCmd, SWT.BORDER | SWT.MULTI);
-		textCMD.setBounds(0, 25, 400, 100);
-		
-		
+		textCMD.setBounds(0, 25, 464, 100);
 		
 		textRotX.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				logger.fine("Rotating on input value");
+				logger.fine("Rotating X on input value");
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
-
-					//logger.fine("Rotating X: " + textRotX.getText());
+					logger.fine("Rotating X: " + textRotX.getText());
 					//rotateX(45);
 					rotateX(Integer.parseInt(textRotX.getText()));
 				}
@@ -315,13 +308,13 @@ public class MainScreen {
 		textRotY.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// logger.fine("Rotating Y on input value");
+				logger.fine("Rotating Y on input value");
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
-					// logger.fine("Rotating Y: "+e.getSource().toString());
+					logger.fine("Rotating Y: "+e.getSource().toString());
 					rotateY(Integer.parseInt(textRotY.getText()));
 				}
 			}
@@ -330,13 +323,13 @@ public class MainScreen {
 		textRotZ.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// logger.fine("Rotating Z on input value");
+				logger.fine("Rotating Z on input value");
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
-					// logger.fine("Rotating Z: "+e.getSource().toString());
+					logger.fine("Rotating Z: "+e.getSource().toString());
 					rotateZ(Integer.parseInt(textRotZ.getText()));
 				}
 			}
@@ -344,11 +337,12 @@ public class MainScreen {
 		
 		/* Details of Canvas which will be used for displaying the image */
 		Composite compositeCanvas = new Composite(shell, SWT.BORDER);
+		compositeCanvas.setLayoutData(new RowData(962, SWT.DEFAULT));
 		compositeCanvas.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		canvas = new Canvas(compositeCanvas, SWT.BORDER);
 		// canvas.setLayout(new FillLayout(SWT.HORIZONTAL));
-		canvas.setLayoutData(new RowData(900, 600));
+		canvas.setLayoutData(new RowData(950, 600));
 
 		canvas.addPaintListener(new PaintListener() {
 			@Override
@@ -358,7 +352,6 @@ public class MainScreen {
 					e.gc.drawImage(image, 0, 0);
 					// image.dispose();
 				}
-
 			}
 		});
 	}
@@ -459,13 +452,18 @@ public class MainScreen {
 			blot.updateMakeFile();
 
 			int returnValue = blot.execute();
-			logger.fine("executeBlot Return Code: " + returnValue);
-			// TODO: Check return value from BlotState and inform user if any
-			// error has occurred
+			logger.info("executeBlot Return Code: " + returnValue);
 
-			loadImage();
+			if(returnValue == 0) {
+				loadImage();
+			}
+			else {
+				MessageBox dialog = new MessageBox(shell, SWT.ICON_ERROR);
+				dialog.setText("Error");
+				dialog.setMessage("Error executing Blot. Please check log.");
+				dialog.open();
+			}
 		}
-
 	}
 
 	/**
