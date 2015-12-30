@@ -155,16 +155,21 @@ class BlotState {
 			logger.info("Result from make: "+proc.exitValue());
 			
 			if (proc.exitValue() > 0) {
+				//if an error has occurred, log the error details
 				BufferedReader input = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 			    String line = null; 
 			    
 			    while ((line = input.readLine()) != null) {
-			            logger.info(line);
+			            logger.severe(line);
 			    }
 			    input.close();
+			    
+			    return -1;
 			     
 			}
 			proc.destroy();
+			
+			return 0;
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -174,8 +179,6 @@ class BlotState {
 			e.printStackTrace();
 			return -1;
 		}
-		
-		return 0;
 	}
 	
 	
