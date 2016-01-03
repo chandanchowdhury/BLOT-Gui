@@ -2,23 +2,31 @@ package edu.ksu.cis.seacas;
 
 import java.util.logging.Logger;
 
-import org.eclipse.swt.*;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 public class MainScreen {
 
 	private final Logger logger = Logger.getLogger(this.getClass().getPackage().getName());
 
 	Shell shell;
-	Canvas canvas;
+	Composite compositeImage;
+	//Canvas canvas;
+	Label imageLabel;
 	Image image;
 
 	// TODO: Implement a config file to read the parameters from there
@@ -294,7 +302,7 @@ public class MainScreen {
 			public void widgetSelected(SelectionEvent e) {
 				//System.out.println("Selection toggle...");
 				Button bt = (Button) e.getSource();
-				setCmdText(bt.getSelection());
+				toggleCmdTextBtn(bt.getSelection());
 			}
 		});
 
@@ -348,24 +356,13 @@ public class MainScreen {
 		});
 		
 		/* Details of Canvas which will be used for displaying the image */
-		Composite compositeCanvas = new Composite(shell, SWT.BORDER);
-		compositeCanvas.setLayoutData(new RowData(962, SWT.DEFAULT));
-		compositeCanvas.setLayout(new RowLayout(SWT.HORIZONTAL));
+		compositeImage = new Composite(shell, SWT.BORDER);
+		compositeImage.setLayoutData(new RowData(962, SWT.DEFAULT));
+		//compositeImage.setLayout(new RowLayout(SWT.HORIZONTAL));
+		compositeImage.setLayout(new RowLayout(SWT.FILL));
 
-		canvas = new Canvas(compositeCanvas, SWT.BORDER);
-		// canvas.setLayout(new FillLayout(SWT.HORIZONTAL));
-		canvas.setLayoutData(new RowData(950, 600));
-
-		canvas.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				if (image != null) {
-					canvas.setLayoutData(new RowData(image.getBounds().width, image.getBounds().height));
-					e.gc.drawImage(image, 0, 0);
-					// image.dispose();
-				}
-			}
-		});
+		imageLabel = new Label(compositeImage, SWT.BORDER);
+		imageLabel.setLayoutData(new RowData(960, 600));
 	}
 
 	/**
@@ -495,25 +492,16 @@ public class MainScreen {
 			/* Clear the old image */
 			if (image != null && image.isDisposed() == false)
 				image.dispose();
+			
 			image = null;
 
 			/* Load new image */
-			image = new Image(canvas.getDisplay(), blot.getImg_path());
-
-			/* Resize canvas layout */
-			canvas.setLayoutData(new RowData(image.getBounds().width, image.getBounds().height));
-
-			/* Set the image in canvas */
-			canvas.setBackgroundImage(image);
-
-			// GC gc = new GC(canvas);
-			// gc.drawImage(image, image.getBounds().width,
-			// image.getBounds().height);
-
+			image = new Image(imageLabel.getDisplay(), blot.getImg_path());
+			imageLabel.setImage(image);
 		}
 	}
 	
-	void setCmdText(boolean active) {
+	void toggleCmdTextBtn(boolean active) {
 		if (active) {
 			logger.info("Activating custom command");
 			String blotCmdText = this.textCMD.getText();
