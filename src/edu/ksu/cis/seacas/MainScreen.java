@@ -1,5 +1,10 @@
 package edu.ksu.cis.seacas;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
@@ -25,13 +30,14 @@ public class MainScreen {
 
 	Shell shell;
 	Composite compositeImage;
-	//Canvas canvas;
+	// Canvas canvas;
 	Label imageLabel;
 	Image image;
 
 	// TODO: Implement a config file to read the parameters from there
 	private String currentDir = "/Users/chandan/Desktop/cmds";
 	private Text textExodusFilePath;
+	private String textBlotScriptFilePath;
 
 	/**
 	 * The state of the Blot along with commands will be stored here.
@@ -78,16 +84,16 @@ public class MainScreen {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		//Display display = new Display();
+		// Display display = new Display();
 		shell = new Shell();
-		shell.setSize(1024, 768);
+		shell.setSize(969, 768);
 		shell.setText("SEACAS - Blot Viewer");
 
 		// Create the BlotState instance
 		this.blot = new BlotState();
 		shell.setLayout(new RowLayout(SWT.HORIZONTAL));
-		Composite compositeExodus = new Composite(shell, SWT.BORDER_DASH);
-		compositeExodus.setLayoutData(new RowData(963, SWT.DEFAULT));
+		Composite compositeExodus = new Composite(shell, SWT.BORDER);
+		compositeExodus.setLayoutData(new RowData(947, SWT.DEFAULT));
 		compositeExodus.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		Button btnSelectExodusFile = new Button(compositeExodus, SWT.NONE);
@@ -114,201 +120,229 @@ public class MainScreen {
 				/* Execute Blot to generate new image */
 				executeBlot();
 
-				//loadImage();
+				// loadImage();
 			}
 		});
 
 		Composite compositeRow2 = new Composite(shell, SWT.BORDER_SOLID);
-		compositeRow2.setLayoutData(new RowData(960, SWT.DEFAULT));
+		compositeRow2.setLayoutData(new RowData(960, 165));
 		compositeRow2.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		Composite compositeBtn = new Composite(compositeRow2, SWT.BORDER);
-		compositeBtn.setLayoutData(new RowData(340, SWT.DEFAULT));
+		Composite compositeBtn = new Composite(compositeRow2, SWT.NONE);
+		compositeBtn.setLayoutData(new RowData(340, 154));
 		compositeBtn.setLayout(new RowLayout(SWT.HORIZONTAL));
-		
+
 		/* Details of X-axis buttons */
-		
+
 		Composite compositeBtnX = new Composite(compositeBtn, SWT.BORDER);
 		compositeBtnX.setLayoutData(new RowData(330, SWT.DEFAULT));
 		compositeBtnX.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		Button btnRotXLargeNeg = new Button(compositeBtnX, SWT.BORDER);
+		Button btnRotXLargeNeg = new Button(compositeBtnX, SWT.NONE);
 		btnRotXLargeNeg.setText("<< 5");
 		btnRotXLargeNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(-5);
-				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) - 5)));
+				textRotX.setText(String.valueOf((Integer.parseInt(textRotX.getText()) - 5)));
 			}
 		});
 
-		Button btnRotXSmallNeg = new Button(compositeBtnX, SWT.BORDER);
+		Button btnRotXSmallNeg = new Button(compositeBtnX, SWT.NONE);
 		btnRotXSmallNeg.setText("< 2");
 		btnRotXSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(-2);
-				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) - 2)));
+				textRotX.setText(String.valueOf((Integer.parseInt(textRotX.getText()) - 2)));
 			}
 		});
 
-		Label lblX = new Label(compositeBtnX, SWT.CENTER);
+		Label lblX = new Label(compositeBtnX, SWT.BORDER | SWT.CENTER);
 		lblX.setAlignment(SWT.CENTER);
 		lblX.setLayoutData(new RowData(17, 17));
 		lblX.setText("X");
 
-		Button btnRotXSmallPos = new Button(compositeBtnX, SWT.BORDER);
+		Button btnRotXSmallPos = new Button(compositeBtnX, SWT.NONE);
 		btnRotXSmallPos.setText("2 >");
 		btnRotXSmallPos.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(2);
-				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) + 2)));
+				textRotX.setText(String.valueOf((Integer.parseInt(textRotX.getText()) + 2)));
 			}
 		});
 
-		Button btnRotXLargePos = new Button(compositeBtnX, SWT.BORDER);
+		Button btnRotXLargePos = new Button(compositeBtnX, SWT.NONE);
 		btnRotXLargePos.setText("5 >>");
 		btnRotXLargePos.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateX(5);
-				textRotX.setText( String.valueOf((Integer.parseInt(textRotX.getText()) + 5)));
+				textRotX.setText(String.valueOf((Integer.parseInt(textRotX.getText()) + 5)));
 			}
 		});
 
 		textRotX = new Text(compositeBtnX, SWT.BORDER);
-		textRotX.setLayoutData(new RowData(48, SWT.DEFAULT));
+		textRotX.setLayoutData(new RowData(48, 20));
 		textRotX.setText("0");
-		
+
 		/* Details of Y-axis buttons */
 		Composite compositeBtnY = new Composite(compositeBtn, SWT.BORDER);
 		compositeBtnY.setLayoutData(new RowData(330, SWT.DEFAULT));
 		compositeBtnY.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		Button btnRotYLargeNeg = new Button(compositeBtnY, SWT.BORDER);
+		Button btnRotYLargeNeg = new Button(compositeBtnY, SWT.NONE);
 		btnRotYLargeNeg.setText("<< 5");
 		btnRotYLargeNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(-5);
-				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) - 5)));
+				textRotY.setText(String.valueOf((Integer.parseInt(textRotY.getText()) - 5)));
 			}
 		});
 
-		Button btnRotYSmallNeg = new Button(compositeBtnY, SWT.BORDER);
+		Button btnRotYSmallNeg = new Button(compositeBtnY, SWT.NONE);
 		btnRotYSmallNeg.setText("< 2");
 		btnRotYSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(-2);
-				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) - 2)));
+				textRotY.setText(String.valueOf((Integer.parseInt(textRotY.getText()) - 2)));
 			}
 		});
 
-		Label lblY = new Label(compositeBtnY, SWT.CENTER);
+		Label lblY = new Label(compositeBtnY, SWT.BORDER | SWT.CENTER);
 		lblY.setAlignment(SWT.CENTER);
 		lblY.setLayoutData(new RowData(17, 17));
 		lblY.setText("Y");
 
-		Button btnRotYSmallPos = new Button(compositeBtnY, SWT.BORDER);
+		Button btnRotYSmallPos = new Button(compositeBtnY, SWT.NONE);
 		btnRotYSmallPos.setText("2 >");
 		btnRotYSmallPos.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(2);
-				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) + 2)));
+				textRotY.setText(String.valueOf((Integer.parseInt(textRotY.getText()) + 2)));
 			}
 		});
 
-		Button btnRotYLargePos = new Button(compositeBtnY, SWT.BORDER);
+		Button btnRotYLargePos = new Button(compositeBtnY, SWT.NONE);
 		btnRotYLargePos.setText("5 >>");
 		btnRotYLargePos.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateY(5);
-				textRotY.setText( String.valueOf((Integer.parseInt(textRotY.getText()) + 5)));
+				textRotY.setText(String.valueOf((Integer.parseInt(textRotY.getText()) + 5)));
 			}
 		});
 
 		textRotY = new Text(compositeBtnY, SWT.BORDER);
-		textRotY.setLayoutData(new RowData(48, SWT.DEFAULT));
+		textRotY.setLayoutData(new RowData(48, 23));
 		textRotY.setText("0");
-		
+
 		/* Details of Z-axis buttons */
 		Composite compositeBtnZ = new Composite(compositeBtn, SWT.BORDER);
 		compositeBtnZ.setLayoutData(new RowData(330, SWT.DEFAULT));
 		compositeBtnZ.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-		
-		Button btnRotZLargeNeg = new Button(compositeBtnZ, SWT.BORDER);
+		Button btnRotZLargeNeg = new Button(compositeBtnZ, SWT.NONE);
 		btnRotZLargeNeg.setText("<< 5");
 		btnRotZLargeNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(-5);
-				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) - 5)));
+				textRotZ.setText(String.valueOf((Integer.parseInt(textRotZ.getText()) - 5)));
 			}
 		});
 
-		Button btnRotZSmallNeg = new Button(compositeBtnZ, SWT.BORDER);
+		Button btnRotZSmallNeg = new Button(compositeBtnZ, SWT.NONE);
 		btnRotZSmallNeg.setText("< 2");
 		btnRotZSmallNeg.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(-2);
-				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) - 2)));
+				textRotZ.setText(String.valueOf((Integer.parseInt(textRotZ.getText()) - 2)));
 			}
 		});
 
-		Label lblZ = new Label(compositeBtnZ, SWT.CENTER);
+		Label lblZ = new Label(compositeBtnZ, SWT.BORDER | SWT.CENTER);
 		lblZ.setAlignment(SWT.CENTER);
 		lblZ.setLayoutData(new RowData(17, 17));
 		lblZ.setText("Z");
 
-		Button btnRotZSmallPos = new Button(compositeBtnZ, SWT.BORDER);
+		Button btnRotZSmallPos = new Button(compositeBtnZ, SWT.NONE);
 		btnRotZSmallPos.setText("2 >");
 		btnRotZSmallPos.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(2);
-				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) + 2)));
+				textRotZ.setText(String.valueOf((Integer.parseInt(textRotZ.getText()) + 2)));
 			}
 		});
 
-		Button btnRotZLargePos = new Button(compositeBtnZ, SWT.BORDER);
+		Button btnRotZLargePos = new Button(compositeBtnZ, SWT.NONE);
 		btnRotZLargePos.setText("5 >>");
 		btnRotZLargePos.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rotateZ(5);
-				textRotZ.setText( String.valueOf((Integer.parseInt(textRotZ.getText()) + 5)));
+				textRotZ.setText(String.valueOf((Integer.parseInt(textRotZ.getText()) + 5)));
 			}
 		});
 
 		textRotZ = new Text(compositeBtnZ, SWT.BORDER);
-		textRotZ.setLayoutData(new RowData(48, SWT.DEFAULT));
+		textRotZ.setLayoutData(new RowData(48, 23));
 		textRotZ.setText("0");
 
-		Composite compositeCmd = new Composite(compositeRow2, SWT.NONE);
-		compositeCmd.setLayoutData(new RowData(600, 125));
+		Composite compositeCmd = new Composite(compositeRow2, SWT.BORDER);
+		compositeCmd.setLayout(new RowLayout(SWT.HORIZONTAL));
+		compositeCmd.setLayoutData(new RowData(600, 153));
 
-		Button btnEnableCommand = new Button(compositeCmd, SWT.CHECK);
-		btnEnableCommand.setBounds(0, 0, 155, 18);
+		Composite compositeBlotBtn = new Composite(compositeCmd, SWT.BORDER);
+		compositeBlotBtn.setLayout(new RowLayout(SWT.HORIZONTAL));
+		compositeBlotBtn.setLayoutData(new RowData(592, 33));
+
+		Button btnEnableCommand = new Button(compositeBlotBtn, SWT.CHECK);
+		btnEnableCommand.setLayoutData(new RowData(SWT.DEFAULT, 25));
+		btnEnableCommand.setToolTipText("Enable or Disable the Blot script.");
 		btnEnableCommand.setText("Enable Command");
-		
+
+		Button btnLoadBlotScript = new Button(compositeBlotBtn, SWT.NONE);
+		btnLoadBlotScript.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectBlotScriptFile();
+			}
+		});
+		btnLoadBlotScript.setToolTipText("Load a file containing the list Blot commands.");
+		btnLoadBlotScript.setText("Load Blot Script");
+
+		Button btnSaveBlotScript = new Button(compositeBlotBtn, SWT.NONE);
+		btnSaveBlotScript.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectBlotScriptSave();
+			}
+		});
+		btnSaveBlotScript.setToolTipText("Save the loaded Blot script file. ");
+		btnSaveBlotScript.setText("Save Blot Script");
+
+		textCMD = new Text(compositeCmd, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		textCMD.setLayoutData(new RowData(592, 105));
+		textCMD.setBounds(0, 25, 464, 100);
+		textCMD.setToolTipText(
+				"When Enable Command is checked, these Blot commands will be executed while generating the image.");
+
 		btnEnableCommand.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//System.out.println("Selection toggle...");
+				// System.out.println("Selection toggle...");
 				Button bt = (Button) e.getSource();
 				toggleCmdTextBtn(bt.getSelection());
 			}
 		});
 
-		textCMD = new Text(compositeCmd, SWT.BORDER | SWT.MULTI);
-		textCMD.setBounds(0, 25, 464, 100);
-		
 		textRotX.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -319,7 +353,7 @@ public class MainScreen {
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
 					logger.fine("Rotating X: " + textRotX.getText());
-					//rotateX(45);
+					// rotateX(45);
 					rotateX(Integer.parseInt(textRotX.getText()));
 				}
 			}
@@ -334,12 +368,12 @@ public class MainScreen {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
-					logger.fine("Rotating Y: "+e.getSource().toString());
+					logger.fine("Rotating Y: " + e.getSource().toString());
 					rotateY(Integer.parseInt(textRotY.getText()));
 				}
 			}
 		});
-		
+
 		textRotZ.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -349,20 +383,20 @@ public class MainScreen {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.keyCode == SWT.CR) {
-					logger.fine("Rotating Z: "+e.getSource().toString());
+					logger.fine("Rotating Z: " + e.getSource().toString());
 					rotateZ(Integer.parseInt(textRotZ.getText()));
 				}
 			}
 		});
-		
+
 		/* Details of Canvas which will be used for displaying the image */
 		compositeImage = new Composite(shell, SWT.BORDER);
-		compositeImage.setLayoutData(new RowData(962, SWT.DEFAULT));
-		//compositeImage.setLayout(new RowLayout(SWT.HORIZONTAL));
+		compositeImage.setLayoutData(new RowData(949, SWT.DEFAULT));
+		// compositeImage.setLayout(new RowLayout(SWT.HORIZONTAL));
 		compositeImage.setLayout(new RowLayout(SWT.FILL));
 
 		imageLabel = new Label(compositeImage, SWT.BORDER);
-		imageLabel.setLayoutData(new RowData(960, 600));
+		imageLabel.setLayoutData(new RowData(924, 523));
 	}
 
 	/**
@@ -448,13 +482,13 @@ public class MainScreen {
 	protected void executeBlot() {
 		logger.info("executeBlot() entered");
 
-		//logger.info("Custom Command: " + textCMD.getText());
-		//blot.setBlotCmdText(textCMD.getText());
+		// logger.info("Custom Command: " + textCMD.getText());
+		// blot.setBlotCmdText(textCMD.getText());
 
-		/*if (buttonCMD.getSelection()) {
-			logger.fine(textCMD.getText());
-			blot.setBlotCmdText(textCMD.getText());
-		}*/
+		/*
+		 * if (buttonCMD.getSelection()) { logger.fine(textCMD.getText());
+		 * blot.setBlotCmdText(textCMD.getText()); }
+		 */
 
 		if (blot.getExodus_file() != "") {
 			blot.updateCmdFile();
@@ -463,10 +497,9 @@ public class MainScreen {
 			int returnValue = blot.execute();
 			logger.info("executeBlot Return Code: " + returnValue);
 
-			if(returnValue == 0) {
+			if (returnValue == 0) {
 				loadImage();
-			}
-			else {
+			} else {
 				MessageBox dialog = new MessageBox(shell, SWT.ICON_ERROR);
 				dialog.setText("Error");
 				dialog.setMessage("Error executing Blot. Please check log.");
@@ -492,7 +525,7 @@ public class MainScreen {
 			/* Clear the old image */
 			if (image != null && image.isDisposed() == false)
 				image.dispose();
-			
+
 			image = null;
 
 			/* Load new image */
@@ -500,16 +533,70 @@ public class MainScreen {
 			imageLabel.setImage(image);
 		}
 	}
-	
+
 	void toggleCmdTextBtn(boolean active) {
 		if (active) {
 			logger.info("Activating custom command");
 			String blotCmdText = this.textCMD.getText();
 			this.blot.setBlotCmdText(blotCmdText);
-		}
-		else {
+		} else {
 			logger.info("Deactivating custom command");
 			this.blot.setBlotCmdText("");
+		}
+	}
+	
+	/**
+	 * Handle the "Load Blot Script" button and display the file chooser
+	 * dialog
+	 */
+	void selectBlotScriptFile() {
+		FileDialog fileChooser = new FileDialog(this.shell, SWT.OPEN);
+		fileChooser.setText("Select Blot Script file");
+		fileChooser.setFilterPath(currentDir);
+		
+		String filename = fileChooser.open();
+		if (filename != null) {
+			textBlotScriptFilePath = null;
+			textBlotScriptFilePath = fileChooser.getFilterPath() +"/" +fileChooser.getFileName();
+			
+			logger.info("Got Blot Script file: " + textBlotScriptFilePath);
+			
+			if (textBlotScriptFilePath != null && textBlotScriptFilePath.length() > 0) {
+				try {
+					String text = new Scanner( new File(textBlotScriptFilePath) ).useDelimiter("\\A").next();
+					textCMD.setText(text);
+					//logger.fine(text);
+				}
+				catch(IOException ioe) {
+					logger.severe("Error with Blot Script file");
+					ioe.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	void selectBlotScriptSave() {
+		logger.entering(this.getClass().getName(),"selectBlotScriptSave");
+		
+		FileDialog fileChooser = new FileDialog(this.shell, SWT.SAVE);
+		fileChooser.setText("Save Blot Script file");
+		fileChooser.setFilterPath(currentDir);
+		
+		String filename = fileChooser.open();
+		if (filename != null) {
+			String file_path = fileChooser.getFilterPath() +"/" +fileChooser.getFileName();
+		
+			logger.info("Saving Blot Script file: "+file_path);
+		
+			try {
+				PrintWriter out = new PrintWriter(file_path);
+				out.print(this.textCMD.getText());
+				out.close();
+			}
+			catch(IOException ioe) {
+				logger.severe("Error saving blot script file");
+				ioe.printStackTrace();
+			}
 		}
 	}
 }
