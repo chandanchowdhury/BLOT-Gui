@@ -6,7 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
@@ -16,6 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
@@ -30,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ScrollPaneConstants;
+import java.awt.GridLayout;
 
 public class MainScreenSwing {
 
@@ -37,8 +43,9 @@ public class MainScreenSwing {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-	private JTable table;
 
+	private JTable table_1;
+	private BufferedImage img;
 	/**
 	 * Launch the application.
 	 */
@@ -67,7 +74,7 @@ public class MainScreenSwing {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1100, 620);
+		frame.setBounds(100, 100, 1130, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -173,27 +180,54 @@ public class MainScreenSwing {
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		FlowLayout flowLayout_1 = (FlowLayout) panel_4.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		panel_4.setBounds(12, 150, 340, 350);
+		panel_4.setBounds(12, 150, 340, 412);
 		frame.getContentPane().add(panel_4);
+		panel_4.setLayout(null);
 		
 		JCheckBox chckbxEnableScript = new JCheckBox("Enable Script");
+		chckbxEnableScript.setBounds(1, 1, 118, 33);
 		panel_4.add(chckbxEnableScript);
 		
 		JButton btnClear = new JButton("Clear");
+		btnClear.setBounds(129, 6, 99, 22);
 		panel_4.add(btnClear);
 		
+		table_1 = new JTable();
+		table_1.setCellSelectionEnabled(true);
+		table_1.setRowSelectionAllowed(false);
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+				{">",""},
+			},
+			new String[] {
+				"", ""
+			}
+		));
+		table_1.setBounds(12, 42, 316, 358);
+		panel_4.add(table_1);
+		
+		try {
+			img = ImageIO.read(new File("/home/chandan/BLOT-Gui/mug.jpg"));
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		JPanel panel_5 = new JPanel();
 		FlowLayout flowLayout_2 = (FlowLayout) panel_5.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		panel_5.setBorder(new TitledBorder(null, "Image", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_5.setBounds(364, 12, 730, 550);
+		panel_5.setBounds(364, 12, 740, 570);
 		frame.getContentPane().add(panel_5);
+		
+		JLabel lblImage = new JLabel(new ImageIcon(img));
+		panel_5.add(lblImage);
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
+		
+		
 	}
 }
