@@ -13,8 +13,10 @@ import java.io.*;
  */
 class BlotState {
 	
+	/* Need the path and name as separate so we can use in Makefile */
 	private String blotExodusFile = "";
 	private String blotExodusFileDir = "";
+	
 	private String blotCmdText = "";
 
 	private int blotCurrent_x = 0;
