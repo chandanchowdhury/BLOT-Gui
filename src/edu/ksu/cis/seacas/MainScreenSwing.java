@@ -405,7 +405,13 @@ public class MainScreenSwing {
             panel_5.setBorder(new TitledBorder(null, currentExodusFile.getAbsolutePath(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
             
     		this.blot.setBlotExodusFileDir(getDirectoryOnly(currentExodusFile.getPath()));
-    		this.blot.setExodus_file(currentExodusFile.getName());
+    		/* Get the file name */
+    		String file_name = currentExodusFile.getName();
+    		/* Split on dot and collect the first part as file name without extension 
+    		 * XXX: Assuming that Exodus file will be of the format "<name>.e", multiple dots will ruin this logic.
+    		 * */
+    		String[] name_parts = file_name.split("\\.");
+    		this.blot.setExodus_file(name_parts[0]);
     		
     		/* reset the rotation values */
     		textField_X.setText("0");
