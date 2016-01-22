@@ -34,6 +34,8 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainScreenSwing {
 	
@@ -64,6 +66,7 @@ public class MainScreenSwing {
 			public void run() {
 				try {
 					MainScreenSwing window = new MainScreenSwing();
+					/*XXX: Do not pack or the layout will get corrupted */
 					//window.frame.pack();
 					window.frame.setVisible(true);
 					
@@ -322,19 +325,6 @@ public class MainScreenSwing {
 		panel_5.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_5.setBounds(449, 6, 750, 586);
 		
-		/* TODO: boiler plate code, remove when testing complete */
-		/*
-		try {
-			//img = ImageIO.read(new File("/home/chandan/BLOT-Gui/mug.jpg"));
-			img = ImageIO.read(new File("/Users/chandan/seacas_cmds/c_final.jpg"));
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		lblImage = new JLabel(new ImageIcon(img));
-		*/
-		
 		lblImage = new JLabel();
 		panel_5.add(lblImage);
 		
@@ -369,9 +359,9 @@ public class MainScreenSwing {
 		panel_6.add(chckbxEnableScript);
 		
 		JButton btnRunScript = new JButton("Run Script");
-		btnRunScript.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO: function to get script content and set in BlotState.blotCmdText
+		btnRunScript.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 		panel_6.add(btnRunScript);
@@ -515,7 +505,7 @@ public class MainScreenSwing {
 		/* Execute Blot to generate the updated image */
 		executeBlot();
 		/* Load the updated image */
-		loadImage();
+		//loadImage();
 
 	}
 	
@@ -556,14 +546,19 @@ public class MainScreenSwing {
 
 		if (img_src != "") {
 
-			lblImage = null;
+			lblImage.setIcon(null);
+			panel_5.updateUI();
 			
 			try {
 				/* Load new image */
+				logger.info("Loading image from: "+this.blot.getImg_path().trim());
 				img = ImageIO.read(new File(this.blot.getImg_path().trim()));
 				
-				/* Show the image */
-				lblImage = new JLabel(new ImageIcon(img));
+				/* set the image */
+				lblImage.setIcon(new ImageIcon(img));
+				/* refresh the screen area */
+				panel_5.updateUI();
+				
 			}
 			catch(Exception e) {
 				JOptionPane.showMessageDialog(frame, "Error loading Image. Please check log.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -593,6 +588,8 @@ public class MainScreenSwing {
 	 * 
 	 */
 	void resetApp() {
+		logger.info("Calling resetApp()...");
+		
 		/* Clear the internal values */
 		this.currentBlotScript = null;
 		this.currentExodusFile = null;
@@ -601,11 +598,13 @@ public class MainScreenSwing {
 		
 		/* clear the image */
 		lblImage.setIcon(null);
-		lblImage = null;
-		lblImage = new JLabel();
 		
 		/* clear the path shown as image title */
 		panel_5.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		/* clear the image from panel_5 */
+		panel_5.updateUI();
+	
 		
 		/* clear the script contents */
 		textAreaScript.setText("");
@@ -614,5 +613,7 @@ public class MainScreenSwing {
 		textField_X.setText("0");
 		textField_Y.setText("0");
 		textField_Z.setText("0");
+		
+		logger.info("Exit resetApp()...");
 	}
 }
