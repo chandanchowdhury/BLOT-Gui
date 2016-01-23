@@ -21,10 +21,18 @@ import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
@@ -113,6 +121,7 @@ public class MainScreenSwing {
 		mntmSaveImageAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				logger.info("Menu -> Save Image As selected...");
+				selectMenuImageSave();
 			}
 		});
 		mnFile.add(mntmSaveImageAs);
@@ -615,5 +624,40 @@ public class MainScreenSwing {
 		textField_Z.setText("0");
 		
 		logger.info("Exit resetApp()...");
+	}
+	
+	void selectMenuImageSave() {
+		logger.entering(this.getClass().getName(),"selectMenuImageSave");
+		
+		/* Set the destination image file name and directory */		
+		JFileChooser fileChooser = new JFileChooser(new File(this.blot.getBlotExodusFileDir()));
+		fileChooser.setSelectedFile(new File(this.blot.getImg_path()));
+		
+		/* Set file filter to allow only JPG files */
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		       "JPG Image", "jpg", "jpeg");
+		fileChooser.setFileFilter(filter);
+		
+		int returnVal = fileChooser.showSaveDialog(frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			logger.info("Saving image file: "+fileChooser.getSelectedFile());
+		
+			try {
+				Path fromFile = Paths.get(this.blot.getImg_path());
+				Path toFile = Paths.get(fileChooser.getSelectedFile().getPath());
+				
+				CopyOption[] options = new CopyOption[]{
+					      StandardCopyOption.REPLACE_EXISTING,
+					      StandardCopyOption.COPY_ATTRIBUTES
+				};
+				
+				Files.copy(fromFile, toFile, options);
+			}
+			catch(IOException ioe) {
+				logger.severe("Error saving image file");
+				ioe.printStackTrace();
+			}
+		}
 	}
 }
