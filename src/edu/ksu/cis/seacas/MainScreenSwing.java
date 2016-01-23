@@ -352,7 +352,7 @@ public class MainScreenSwing {
 		panel_6.setBounds(6, 6, 419, 39);
 		panel_4.add(panel_6);
 		
-		JCheckBox chckbxEnableScript = new JCheckBox("Enable Script");
+		JCheckBox chckbxEnableScript = new JCheckBox("Edit Script");
 
 		chckbxEnableScript.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -368,9 +368,9 @@ public class MainScreenSwing {
 		panel_6.add(chckbxEnableScript);
 		
 		JButton btnRunScript = new JButton("Run Script");
-		btnRunScript.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnRunScript.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				executeBlotWithScript();
 			}
 		});
 		panel_6.add(btnRunScript);
@@ -433,6 +433,7 @@ public class MainScreenSwing {
     		try {
 				String text = new Scanner(currentBlotScript).useDelimiter("\\A").next();
 				textAreaScript.setText(text);
+				this.blot.setBlotCmdText(text);
 			}
 			catch(IOException ioe) {
 				logger.severe("Error with Blot Script file");
@@ -538,6 +539,11 @@ public class MainScreenSwing {
 				JOptionPane.showMessageDialog(frame, "Error executing Blot. Please check log.", "Error", JOptionPane.ERROR_MESSAGE);				
 			}
 		}
+	}
+	
+	void executeBlotWithScript() {
+		this.blot.setBlotCmdText(textAreaScript.getText());
+		executeBlot();
 	}
 	
 	/**
