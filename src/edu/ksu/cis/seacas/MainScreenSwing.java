@@ -394,6 +394,10 @@ public class MainScreenSwing {
 	
 	void selectExodusFile() {
 		JFileChooser fileChooser = new JFileChooser();
+		/* Set file filter to allow only .e or .exo files */
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		       "EXODUS II", "e", "exo");
+		fileChooser.setFileFilter(filter);
 		int returnVal = fileChooser.showOpenDialog(frame);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
