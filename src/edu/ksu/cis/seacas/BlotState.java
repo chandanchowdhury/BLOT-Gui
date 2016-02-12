@@ -150,7 +150,17 @@ class BlotState {
 		//System.out.println("\n--BlotState.execute() --\n");
 		try {
 			Runtime runtime = Runtime.getRuntime();
-			Process proc = runtime.exec(new String[] {"bash","-c","make"});
+			Process proc;
+			
+			logger.info("Detecting OS... Found: " + System.getProperty("os.name"));
+			
+			if(System.getProperty("os.name") == "Windows") {
+				logger.info("Invoking nmake under Windows..."); 
+				proc = runtime.exec(new String[] {"nmake"});
+			} else {
+				logger.info("Invoking make under bash..."); 
+				proc = runtime.exec(new String[] {"bash","-c","make"});
+			}
 			
 			proc.waitFor();
 			
