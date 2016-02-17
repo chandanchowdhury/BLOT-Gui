@@ -154,7 +154,7 @@ class BlotState {
 			
 			logger.info("Detecting OS... Found: " + System.getProperty("os.name"));
 			
-			if(System.getProperty("os.name") == "Windows") {
+			if(System.getProperty("os.name").contains("Windows")) {
 				logger.info("Invoking nmake under Windows..."); 
 				proc = runtime.exec(new String[] {"nmake"});
 			} else {

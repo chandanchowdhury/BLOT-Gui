@@ -22,7 +22,6 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,8 +41,6 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class MainScreenSwing {
 
@@ -613,8 +610,17 @@ public class MainScreenSwing {
 	}
 
 	String getDirectoryOnly(String path) {
-
-		String directoryPattern = "^(.*/)?(?:$|(.+?)(?:(\\\\.[^.]*$)|$))";
+		String directoryPattern;
+		
+		logger.info("Parsing EXODUS file path : "+path);
+		logger.info("OS detected: "+System.getProperty("os.name"));
+		
+		if(System.getProperty("os.name").contains("Windows")) {
+			logger.info("Parsing windows path...");
+			directoryPattern = "^(.*\\\\)?(?:$|(.+?)(?:(\\\\.[^.]*$)|$))";
+		}else {
+			directoryPattern = "^(.*/)?(?:$|(.+?)(?:(\\\\.[^.]*$)|$))";
+		}
 		Pattern r = Pattern.compile(directoryPattern);
 		Matcher m = r.matcher(path);
 
